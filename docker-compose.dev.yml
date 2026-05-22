@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kazan-price-predictor-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./backend:/app/backend
+      - ./src:/app/src
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - kazan-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: kazan-price-predictor-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - kazan-network
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/index.html:/app/index.html
+      - /app/node_modules
+
+networks:
+  kazan-network:
+    driver: bridge

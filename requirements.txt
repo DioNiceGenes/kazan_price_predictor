@@ -1,0 +1,14 @@
+fastapi==0.115.*
+uvicorn[standard]==0.30.*
+pydantic==2.9.*
+pandas
+numpy
+scikit-learn
+lightgbm
+xgboost
+mlflow
+joblib
+python-dotenv
+pyyaml
+pillow
+tqdm
