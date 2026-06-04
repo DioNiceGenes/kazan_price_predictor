@@ -6,4 +6,5 @@ notebooks
 data*
 mlruns
 reports
-models
+models/X*
+models/y*
